@@ -1,15 +1,24 @@
-const express = require("express");
-const app = express();
-const port = 8080;
+const dotenv = require("dotenv");
+const discord = require("discord.js");
 
-app.get("/", 
-    function (request, response)
+dotenv.config();
+
+const token = process.env.CLIENT_TOKEN;
+
+const client = new discord.Client(
     {
-        response.send("Hello World!")
+        intents: [
+            discord.GatewayIntentBits.Guilds,
+            discord.GatewayIntentBits.GuildMessages,
+            discord.GatewayIntentBits.GuildMessageTyping,
+            discord.GatewayIntentBits.GuildMessageReactions
+        ]
     });
 
-app.listen(port,
-    function() 
+client.on("ready", 
+    function()
     {
-        console.log(`App is listening at http://localhost:${port}`);
-    })
+        console.log(`Logged in as ${client.user.tag}!`);
+    });
+
+client.login(token);
